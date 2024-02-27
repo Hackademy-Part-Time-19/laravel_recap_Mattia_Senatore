@@ -1,10 +1,11 @@
 <?php
 
+
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
 use App\Http\Controllers\Bookcontroller;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +19,14 @@ use Inertia\Inertia;
 */
 
 Route::get('/',[Bookcontroller::class,'homepage'])->name('home');
-Route::get('/book/create',[Bookcontroller::class,'create'])->name('form');
-Route::post('/book/store',[Bookcontroller::class,'store'])->name('books.store');
-Route::get('/book/{$id}',[Bookcontroller::class,'show'])->name('id_book');
+Route::get('/books/index',[Bookcontroller::class,'index'])->name('indice');
+Route::get('/books/genre',[Bookcontroller::class,'byGenre'])->name('generi');
+Route::get('user/books',[Bookcontroller::class,'userBooks'])->name('user.books')->middleware('auth');
+
+Route::middleware('auth')->group(function () {
+    Route::resource('books',BookController::class);
+    Route::get('books.bygenre',[Bookcontroller::class,'byGenre'])->name('books.byGenre');
+});
 
 
 
